@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from ckeditor.fields import RichTextField
 
 from .managers import PostManager
 
@@ -15,7 +16,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.PROTECT)
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(unique=True)
-    body = models.TextField()
+    body = RichTextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(default="draft", choices=STATUS, max_length=50)
