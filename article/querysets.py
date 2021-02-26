@@ -2,6 +2,8 @@ from django.db.models import QuerySet
 
 
 class PostQuerySet(QuerySet):
+    def draft(self) -> "PostQuerySet":
+        return self.filter(status="draft")
 
-    def active(self) -> "PostQuerySet":
-        return self.filter(active=True)
+    def publish(self) -> "PostQuerySet":
+        return self.filter(status="publish")
