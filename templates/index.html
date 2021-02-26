@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      {% for post in post_list %}
+      <div>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.author }} | {{ post.created}}</p>
+        <p>{{post.body|slice:":200" }}</p>
+        <a href="{% url 'post_detail' post.slug  %}">Read More</a>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
