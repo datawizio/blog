@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from .manager import PostManager
+from .managers import PostManager
 
 User = get_user_model()
 
