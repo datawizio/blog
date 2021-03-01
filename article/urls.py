@@ -1,16 +1,9 @@
-from rest_framework_extensions.routers import ExtendedDefaultRouter
+from django.urls import path
 
-from . import viewsets as article_viewsets
+from .views import PostList, PostDetail
 
-app_name = "article"
-router = ExtendedDefaultRouter()
 
-posts_router = router.register(r"posts", article_viewsets.PostModelViewSet, basename="posts")
-posts_router.register(
-    r"comments",
-    article_viewsets.CommentModelViewSet,
-    basename="comments",
-    parents_query_lookups=["post_id"]
-)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("", PostList.as_view(), name="home"),
+    path("<slug:slug>/", PostDetail.as_view(), name="post_detail"),
+]

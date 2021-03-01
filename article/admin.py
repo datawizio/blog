@@ -14,6 +14,8 @@ class CommentAdminModelInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdminModel(admin.ModelAdmin):
     inlines = [CommentAdminModelInline]
+    prepopulated_fields = {"slug": ("title",)}
+    list_display = ("title", "slug", "status", "created")
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).prefetch_related("comments")
