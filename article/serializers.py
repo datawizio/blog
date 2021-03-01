@@ -5,13 +5,12 @@ from rest_framework.serializers import ModelSerializer
 from account import serializers as account_serializers
 from . import models as article_models
 
-
 User = get_user_model()
 
 
 class CommentSerializer(ModelSerializer):
     post_id = serializers.PrimaryKeyRelatedField(
-        queryset=article_models.Post.objects.active(),
+        queryset=article_models.Post.objects.all(),
         source="post"
     )
 
@@ -22,20 +21,25 @@ class CommentSerializer(ModelSerializer):
 
 class PostListSerializer(ModelSerializer):
     author = account_serializers.UserSerializer(read_only=True)
+    status = serializers.ChoiceField(
+        choices=article_models.STATUS,
+        default="draft",
+        required=False
+    )
 
     class Meta:
         model = article_models.Post
-        fields = ("id", "slug", "title", "created", "author")
+        fields = ("id", "slug", "title", "status", "created", "author")
 
 
 class PostSerializer(PostListSerializer):
+    slug = serializers.SlugField(required=True)
     author_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
         default=serializers.CurrentUserDefault(),
         source="author",
     )
     comments = CommentSerializer(many=True, read_only=True)
-    slug = serializers.SlugField(required=True)
 
     class Meta:
         model = article_models.Post
@@ -44,9 +48,9 @@ class PostSerializer(PostListSerializer):
             "slug",
             "title",
             "body",
-            "active",
             "created",
             "updated",
+            "slug",
             "author_id",
             "author",
             "comments",

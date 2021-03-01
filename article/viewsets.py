@@ -7,7 +7,7 @@ from . import models as article_models
 
 
 class PostModelViewSet(BaseModelViewSet):
-    queryset = article_models.Post.objects.active().prefetch_related("comments")
+    queryset = article_models.Post.objects.all().prefetch_related("comments")
     serializer_class = article_serializers.PostSerializer
     serializer_classes = {
         "list": article_serializers.PostListSerializer,
