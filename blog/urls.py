@@ -20,9 +20,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include("article.urls")),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
     path("api/", include("core.urls", namespace="api"), name="api"),
     path("api-auth/", include("rest_framework.urls", namespace="rest-framework")),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
