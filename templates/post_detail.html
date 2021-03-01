@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block "content" %}
-
+  <input type="hidden" id="post-id" value="{{ object.id }}" />
   <div class="blog-post">
     <h1>{{ object.title }}</h1>
     <hr/>
@@ -46,8 +46,5 @@
   </div>
 
 
-  <script>
-        
-  </script>
 
 {% endblock %}

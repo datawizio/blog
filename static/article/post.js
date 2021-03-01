@@ -14,8 +14,9 @@ function putLike() {
 
 
 function sendComment(comment) {
+  const postId = $("#post-id").val();
   $.ajax({
-    url: "",
+    url: `/api/article/posts/${postId}/comments/`,
     method: "POST",
     data: comment,
     success: function() {
@@ -35,18 +36,20 @@ function showComments(comments) {
 }
 
 function loadComments() {
+  const postId = $("#post-id").val();
   $(".comments-list").html("Loading...")
   $.ajax({
-    url: "",
+    url: `/api/article/posts/${postId}/comments/`,
     method: "GET",
-    success: function() {
-      showComments();
+    success: function(data) {
+      showComments(data.results);
     }
   })
 
 }
 
 $(document).ready(function() {
+  loadComments();
   $("#form-comment").on("submit", function() {
     const array = $('#form').serializeArray();
     const data = {};
