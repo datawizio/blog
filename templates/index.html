@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div>
+{% extends "base.html" %}
+
+{% block "title" %}Posts{% endblock %}
+
+{% block "content" %}
+     <div class="jumbotron">
+        <h1 class="display-4">Hello, world!</h1>
+        <p class="lead">This is a my super blog about something.</p>
+    </div>
+    <div class="row">
       {% for post in post_list %}
       <div>
         <h2>{{ post.title }}</h2>
@@ -18,5 +18,4 @@
       </div>
       {% endfor %}
     </div>
-  </body>
-</html>
+{% endblock %}
