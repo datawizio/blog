@@ -304,4 +304,5 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "core.pagination.CustomPageNumberPagination",
     "PAGE_SIZE": 100,
+    "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",
 }
