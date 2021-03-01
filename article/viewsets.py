@@ -1,6 +1,7 @@
+from rest_framework.mixins import CreateModelMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from core.viewsets import BaseModelViewSet
+from core.viewsets import BaseModelViewSet, BaseReadOnlyViewSet
 
 from . import serializers as article_serializers
 from . import models as article_models
@@ -14,7 +15,7 @@ class PostModelViewSet(BaseModelViewSet):
     }
 
 
-class CommentModelViewSet(NestedViewSetMixin, BaseModelViewSet):
+class CommentModelViewSet(NestedViewSetMixin, BaseReadOnlyViewSet, CreateModelMixin):
     queryset = article_models.Comment.objects.all()
     serializer_class = article_serializers.CommentSerializer
 
