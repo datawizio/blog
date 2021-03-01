@@ -30,7 +30,6 @@ function sendComment(comment) {
 function showComments(comments) {
   $(".comments-list").html("")
   comments.forEach((comment) => {
-    console.log(comment)
     const el = $("<div class='pt-2'></div>").html(`
     <hr /><b>${comment.author}</b>: ${comment.body}
     `);
