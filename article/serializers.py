@@ -13,7 +13,6 @@ class CommentSerializer(ModelSerializer):
         queryset=article_models.Post.objects.all(),
         source="post"
     )
-
     class Meta:
         model = article_models.Comment
         fields = ("id", "post_id", "author", "body",)

@@ -18,7 +18,8 @@ function sendComment(comment) {
   $.ajax({
     url: `/api/article/posts/${postId}/comments/`,
     method: "POST",
-    data: comment,
+    data: JSON.stringify(comment ),
+    contentType: "application/json; charset=utf-8",
     success: function() {
       loadComments();
       $("#form-comment")[0].reset();
@@ -29,8 +30,11 @@ function sendComment(comment) {
 function showComments(comments) {
   $(".comments-list").html("")
   comments.forEach((comment) => {
-    const el = $("<div></div>").html(comment);
-    $(".comments-list").append(comment)
+    console.log(comment)
+    const el = $("<div class='pt-2'></div>").html(`
+    <hr /><b>${comment.author}</b>: ${comment.body}
+    `);
+    $(".comments-list").append(el)
   })
 
 }
@@ -51,7 +55,7 @@ function loadComments() {
 $(document).ready(function() {
   loadComments();
   $("#form-comment").on("submit", function() {
-    const array = $('#form').serializeArray();
+    const array = $('#form-comment').serializeArray();
     const data = {};
     array.forEach(function(item) {
       data[item["name"]] = item["value"];
