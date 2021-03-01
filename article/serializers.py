@@ -29,11 +29,17 @@ class PostListSerializer(ModelSerializer):
 
     class Meta:
         model = article_models.Post
-        fields = ("id", "slug", "title", "status", "created", "author")
+        fields = (
+            "id",
+            "slug",
+            "title",
+            "status",
+            "created",
+            "author"
+        )
 
 
 class PostSerializer(PostListSerializer):
-    slug = serializers.SlugField(required=True)
     author_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
         default=serializers.CurrentUserDefault(),
@@ -50,7 +56,7 @@ class PostSerializer(PostListSerializer):
             "body",
             "created",
             "updated",
-            "slug",
+            "status",
             "author_id",
             "author",
             "comments",
