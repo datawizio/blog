@@ -1,5 +1,5 @@
 from rest_framework.mixins import CreateModelMixin
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from core.viewsets import BaseModelViewSet, BaseReadOnlyViewSet
@@ -21,6 +21,7 @@ class PostModelViewSet(BaseModelViewSet):
 class CommentModelViewSet(NestedViewSetMixin, BaseReadOnlyViewSet, CreateModelMixin):
     queryset = article_models.Comment.objects.all()
     serializer_class = article_serializers.CommentSerializer
+    permission_classes = [AllowAny]
 
     def get_serializer(self, *args, **kwargs):
         if kwargs.get("data"):
