@@ -21,6 +21,7 @@ class PostModelViewSet(BaseModelViewSet):
 class CommentModelViewSet(NestedViewSetMixin, BaseReadOnlyViewSet, CreateModelMixin):
     queryset = article_models.Comment.objects.all()
     serializer_class = article_serializers.CommentSerializer
+    permission_classes = []
 
     def get_serializer(self, *args, **kwargs):
         if kwargs.get("data"):
