@@ -89,7 +89,7 @@ def like_post(update, context):
     api = BlogApi()
     query: CallbackQuery = update.callback_query
     post_id = query.data.replace("like-", "")
-    response = api.like_post(post_id, update.effective_message.from_user.id)
+    response = api.like_post(post_id, update.effective_message.chat.id)
 
     if response.get("likes") is None:
         return
