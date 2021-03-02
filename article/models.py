@@ -30,6 +30,9 @@ class Post(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    def like_count(self):
+        return self.likes.count()
+
 
 class Comment(models.Model):
     post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="comments")
