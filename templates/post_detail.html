@@ -14,10 +14,9 @@
     <hr/>
     <p class="blog-post-meta text-secondary">{{ post.created }} by {{ post.author }}</p>
     <p>{{ object.body|safe }}</p>
-    <button class="btn btn-primary"><i class="fa fa-thumbs-up">Like</i> {{ object.like_count }}</button>
+    <button class="btn btn-primary btn-like" data-post="{{ object.id }}"><i class="fa fa-thumbs-up">Like</i> <span>{{ object.like_count }}</span></button>
   </div>
 
-  <button class="btn btn-primary"><i class="fa fa-thumbs-up">Like</i> 123</button>
 
   <div class="comments pt-4">
     <h3>Comments</h2>

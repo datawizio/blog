@@ -1,17 +1,13 @@
-function putLike() {
-  const postId = $("#post-id").value();
+function putLike(postId) {
   $.ajax({
-    url: "",
+    url: `/api/article/posts/${postId}/like/`,
     method: "POST",
-    
-    success: function() {
-      loadComments();
-      $("#form-comment")[0].reset();
+    success: function(res) {
+      console.log(res)
+      $(`.btn-like[data-post=${postId}] span`).html(res.likes);
     }
   })
 }
-
-
 
 function sendComment(comment) {
   const postId = $("#post-id").val();
@@ -62,5 +58,9 @@ $(document).ready(function() {
 
     sendComment(data);
     return false;
+  })
+
+  $(".btn-like").on("click", function() {
+    putLike($(this).data("post"));
   })
 })

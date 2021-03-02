@@ -1,6 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block "title" %}Posts{% endblock %}
+
+{% block "script" %}
+  <script src="{% static '/article/post.js' %}"></script>
+{% endblock %}
 
 {% block "content" %}
      <div class="jumbotron">
@@ -15,7 +20,7 @@
               <h2 class="card-title">{{ post.title }}</h2>
               <p class="text-primary">{{ post.created}} by {{ post.author }}</p>
               <p  class="card-text">{{post.body|safe }}</p>
-              <button class="btn btn-primary"><i class="fa fa-thumbs-up">Like</i> {{ post.like_count }}</button>
+              <button class="btn btn-primary btn-like" data-post="{{ post.id }}"><i class="fa fa-thumbs-up">Like</i> <span>{{ post.like_count }}</span></button>
               <a href="{% url 'post_detail' post.slug  %}" class="btn btn-primary">Read More</a>
               </div>
           </div>
