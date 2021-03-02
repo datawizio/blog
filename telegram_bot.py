@@ -44,9 +44,9 @@ class BlogApi:
         response = self.get(path)
         return response
 
-    def like_post(self, post_id):
+    def like_post(self, post_id, user_id):
         path = f"/article/posts/{post_id}/like/"
-        response = self.post(path)
+        response = self.post(path, {"session_key": user_id})
         return response
 
 
@@ -89,7 +89,7 @@ def like_post(update, context):
     api = BlogApi()
     query: CallbackQuery = update.callback_query
     post_id = query.data.replace("like-", "")
-    response = api.like_post(post_id)
+    response = api.like_post(post_id, update.effective_message.from_user.id)
 
     if response.get("likes") is None:
         return
