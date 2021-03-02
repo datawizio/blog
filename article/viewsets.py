@@ -1,5 +1,4 @@
 from django.db.models import Count
-from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
@@ -29,7 +28,7 @@ class PostModelViewSet(BaseModelViewSet):
     @action(methods=["post"], detail=True, url_path="like", url_name="like", permission_classes=[AllowAny])
     def like(self, request, *args, **kwargs):
         post = self.get_object()
-        session_key = request.data.get("session_key", request.session.session_key)
+        session_key = request.data.get("session_key", request.session.session_key or request.META.get('REMOTE_ADDR'))
 
         if session_key is not None:
             if liked_post := post.likes.filter(session_key=session_key).first():
