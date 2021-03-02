@@ -24,9 +24,14 @@ class BlogApi:
     def get_url(self, path):
         return f"{self.hostname}{path}"
 
-    def get(self, path, query_params=None):
+    def get(self, path):
         url = self.get_url(path)
         response = requests.get(url)
+        return response.json()
+
+    def post(self, path, data=None):
+        url = self.get_url(path)
+        response = requests.post(url, data or {})
         return response.json()
 
     def get_post_list(self):
@@ -37,6 +42,11 @@ class BlogApi:
     def get_post_detail(self, post_id):
         path = f"/article/posts/{post_id}/"
         response = self.get(path)
+        return response
+
+    def like_post(self, post_id):
+        path = f"/article/posts/{post_id}/like/"
+        response = self.post(path)
         return response
 
 
@@ -75,6 +85,22 @@ def message_posts(update: Update, context: CallbackContext):
     )
 
 
+def like_post(update, context):
+    api = BlogApi()
+    query: CallbackQuery = update.callback_query
+    post_id = query.data.replace("like-", "")
+    response = api.like_post(post_id)
+
+    if response.get("likes") is None:
+        return
+
+    query.answer(text="Like post ❤️!")
+    reply_markup = InlineKeyboardMarkup(
+        [[InlineKeyboardButton(text=f"❤️{response['likes']}", callback_data=f"like-{post_id}")]]
+    )
+    query.edit_message_reply_markup(reply_markup=reply_markup)
+
+
 def select_post(update, context):
     api = BlogApi()
     query: CallbackQuery = update.callback_query
@@ -86,8 +112,8 @@ def select_post(update, context):
     message = (
         f"*Title:* {post['title']}\n"
         f"*Body:* {post['body']}\n\n"
-        f"*Author:* {author['first_name']} {author['last_name']}\n"
-        f"*Created:* {post['created']}\n"
+        f"👤: {author['first_name']} {author['last_name']}\n"
+        f"🕐: {post['created']}\n"
     )
     comments = "\n".join(
         [f"\n   *{comment['author']}*: {comment['body']}" for comment in post["comments"]]
@@ -95,12 +121,16 @@ def select_post(update, context):
     if comments:
         message = message + f"*Comments:* {comments}"
 
-    query.edit_message_text(text=message, parse_mode=ParseMode.MARKDOWN)
+    reply_markup = InlineKeyboardMarkup(
+        [[InlineKeyboardButton(text=f"❤️{post['likes']}", callback_data=f"like-{post_id}")]]
+    )
+
+    query.edit_message_text(text=message, parse_mode=ParseMode.MARKDOWN, reply_markup=reply_markup)
 
 
 if __name__ == '__main__':
     # Initial Updater and Dispatcher
-    updater = Updater(token="", use_context=True)
+    updater = Updater(token="1603305869:AAF6pfXoxVb48CFNH8Px_LYITJcP-57UuBk", use_context=True)
     dispatcher = updater.dispatcher
 
     # Initial Handlers
@@ -108,6 +138,7 @@ if __name__ == '__main__':
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(MessageHandler(Filters.regex("Posts"), message_posts))
     dispatcher.add_handler(CallbackQueryHandler(select_post, pattern="^post+"))
+    dispatcher.add_handler(CallbackQueryHandler(like_post, pattern="^like+"))
     dispatcher.add_handler(MessageHandler(Filters.command, unknown))
 
     # Start to parse telegram updates
