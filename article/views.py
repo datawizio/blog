@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.views.generic import ListView, DetailView
 from .models import Post
 
@@ -5,7 +6,7 @@ from .models import Post
 
 
 class PostList(ListView):
-    queryset = Post.objects.publish()
+    queryset = Post.objects.publish().annotate(like_count=Count("likes"))
     template_name = "index.html"
 
 
