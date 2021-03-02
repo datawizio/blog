@@ -1,5 +1,9 @@
+from django.db.models import Count
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from core.viewsets import BaseModelViewSet, BaseReadOnlyViewSet
@@ -10,17 +14,38 @@ from . import models as article_models
 
 
 class PostModelViewSet(BaseModelViewSet):
-    queryset = article_models.Post.objects.all().prefetch_related("comments", "author")
+    queryset = article_models.Post.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, article_permissions.PostPermission]
     serializer_class = article_serializers.PostSerializer
     serializer_classes = {
         "list": article_serializers.PostListSerializer,
     }
 
+    def get_queryset(self):
+        queryset = super(PostModelViewSet, self).get_queryset().prefetch_related("comments", "author")
+        queryset = queryset.annotate(likes_count=Count("likes"))
+        return queryset
+
+    @action(methods=["post"], detail=True, url_path="like", url_name="like", permission_classes=[AllowAny])
+    def like(self, request, *args, **kwargs):
+        post = self.get_object()
+        session_key = request.session.session_key
+
+        if session_key is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if liked_post := post.likes.filter(session_key=session_key).first():
+            liked_post.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        article_models.Like.objects.create(session_key=session_key, post=post)
+        return Response(status=status.HTTP_201_CREATED)
+
 
 class CommentModelViewSet(NestedViewSetMixin, BaseReadOnlyViewSet, CreateModelMixin):
     queryset = article_models.Comment.objects.all()
     serializer_class = article_serializers.CommentSerializer
+    permission_classes = [AllowAny]
 
     def get_serializer(self, *args, **kwargs):
         if kwargs.get("data"):

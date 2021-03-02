@@ -21,6 +21,7 @@ class CommentSerializer(ModelSerializer):
 
 class PostListSerializer(ModelSerializer):
     author = account_serializers.UserSerializer(read_only=True)
+    likes = serializers.IntegerField(source="likes_count", read_only=True)
     status = serializers.ChoiceField(
         choices=article_models.STATUS,
         default="draft",
@@ -35,7 +36,8 @@ class PostListSerializer(ModelSerializer):
             "title",
             "status",
             "created",
-            "author"
+            "likes",
+            "author",
         )
 
 
@@ -57,6 +59,7 @@ class PostSerializer(PostListSerializer):
             "created",
             "updated",
             "status",
+            "likes",
             "author_id",
             "author",
             "comments",

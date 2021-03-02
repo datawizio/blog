@@ -39,3 +39,12 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ("created",)
+
+
+class Like(models.Model):
+    post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="likes")
+    session_key = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (("post", "session_key"),)
