@@ -36,7 +36,7 @@ class PostModelViewSet(BaseModelViewSet):
             else:
                 article_models.Like.objects.create(session_key=session_key, post=post)
 
-        return Response({"likes": post.likes.count()}, status=status.HTTP_201_CREATED)
+        return Response({"likes": post.likes.count()})
 
 
 class CommentModelViewSet(NestedViewSetMixin, BaseReadOnlyViewSet, CreateModelMixin):
