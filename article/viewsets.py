@@ -29,8 +29,9 @@ class PostModelViewSet(BaseModelViewSet):
     @action(methods=["post"], detail=True, url_path="like", url_name="like", permission_classes=[AllowAny])
     def like(self, request, *args, **kwargs):
         post = self.get_object()
+        session_key = request.data.get("session_key", request.session.session_key)
 
-        if (session_key := request.session.session_key) is not None:
+        if session_key is not None:
             if liked_post := post.likes.filter(session_key=session_key).first():
                 liked_post.delete()
             else:
