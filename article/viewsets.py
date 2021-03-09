@@ -13,7 +13,7 @@ from . import models as article_models
 
 
 class PostModelViewSet(BaseModelViewSet):
-    queryset = article_models.Post.objects.all()
+    queryset = article_models.Post.objects.all().prefetch_related("comments", "author")
     permission_classes = [IsAuthenticatedOrReadOnly, article_permissions.PostPermission]
     serializer_class = article_serializers.PostSerializer
     serializer_classes = {
@@ -21,8 +21,8 @@ class PostModelViewSet(BaseModelViewSet):
     }
 
     def get_queryset(self):
-        queryset = super(PostModelViewSet, self).get_queryset().prefetch_related("comments", "author")
-        queryset = queryset.annotate(likes_count=Count("likes"))
+        queryset = super(PostModelViewSet, self).get_queryset()
+        queryset = queryset.annotate(likes_count=Count("likes"), comments_count=Count("comments"))
         return queryset
 
     @action(methods=["post"], detail=True, url_path="like", url_name="like", permission_classes=[AllowAny])
@@ -37,6 +37,20 @@ class PostModelViewSet(BaseModelViewSet):
                 article_models.Like.objects.create(session_key=session_key, post=post)
 
         return Response({"likes": post.likes.count()})
+
+    @action(methods=["GET"], detail=False, url_path="top_by_likes", url_name="top_by_likes")
+    def top_by_likes(self, request, *args, **kwargs):
+        top = int(request.query_params.get("top", 10))
+        queryset = self.get_queryset().order_by("-like_count")[:top]
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(methods=["GET"], detail=False, url_path="top_by_comments", url_name="top_by_comments")
+    def top_by_comments(self, request, *args, **kwargs):
+        top = int(request.query_params.get("top", 10))
+        queryset = self.get_queryset().order_by("-comments_count")[:top]
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CommentModelViewSet(NestedViewSetMixin, BaseReadOnlyViewSet, CreateModelMixin):
