@@ -11,15 +11,10 @@ RUN apt-get -y update &&  \
     graphviz openssh-client \
     libssl-dev libffi-dev zlib1g-dev lsb-release \
     # Application additional dependencies
-    default-libmysqlclient-dev unixodbc unixodbc-dev \
+    unixodbc unixodbc-dev \
     # python dev
     python3-pip python3-dev \
   && apt-get clean
-
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' &&  \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&  \
-    apt-get -y update \
-    && apt-get install -y postgresql-14
 
 RUN python -m pip install pip --upgrade --default-timeout=100 future
 RUN pip install --upgrade setuptools wheel

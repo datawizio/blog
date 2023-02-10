@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% load components %}
+
+{% block title %}{{ object.title }}{% endblock title %}
+
+
+{% block content %}
+<div class="p-4">
+  <input type="hidden" id="post-id" value="{{ object.id }}" />
+  <div>
+    <div class="blog-post p-5">
+      <h1>{{ object.title }}</h1>
+      <hr />
+      <p class="blog-post-meta text-secondary">{{ post.created|date:"d.m.Y" }} by {{ post.author }}</p>
+      <p>{{ object.body|safe }}</p>
+      {% like_btn %}
+    </div>
+  </div>
+  {% include 'components/comments.html' %}
+  <!-- render last_articles here -->
+
+</div>
+
+{% endblock content%}

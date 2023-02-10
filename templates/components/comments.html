@@ -1,0 +1,25 @@
+<details class="comments pt-4 p-5">
+    <summary>Comments</summary>
+    <hr />
+    <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#addComments"
+        aria-expanded="false" aria-controls="addComments">
+        Add comment
+    </button>
+    <div class="collapse" id="addComments">
+        <div class="card card-body mt-2">
+            <form id="form-comment">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="author">Your name</label>
+                    <input required type="text" class="form-control" id="author" name="author">
+                </div>
+                <div class="form-group">
+                    <label for="body">Your comment</label>
+                    <textarea required class="form-control" id="body" rows="3" name="body"></textarea>
+                </div>
+                <button class="btn btn-primary add-new" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="comments-list"></div>
+</details>

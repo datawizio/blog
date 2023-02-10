@@ -1,31 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load components %}
 
-{% block title %}Posts{% endblock %}
+{% block title %}Posts{% endblock title%}
 
-{% block "script" %}
-<script src="{% static '/article/post.js' %}"></script>
-{% endblock %}
 
-{% block "content" %}
-<div class="jumbotron">
-  <h1 class="display-4">Hello, world!</h1>
-  <p class="lead">This is a my super blog about something.</p>
-</div>
-<div class="row">
-  {% for post in post_list %}
-  <div class="post-item col-12 col-md-6 p-2">
-    <div class="card h-100">
-      <div class="card-body">
-        <h2 class="card-title">{{ post.title }}</h2>
-        <p class="text-primary">{{ post.created}} by {{ post.author }}</p>
-        <p class="card-text">{{post.body|safe }}</p>
-        <button class="btn btn-primary btn-like" data-post="{{ post.id }}"><i class="fa fa-thumbs-up">Like</i> <span>{{
-            post.like_count }}</span></button>
-        <a href="{% url 'post_detail' post.slug  %}" class="btn btn-primary">Read More</a>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-{% endblock %}
+{% block content %}
+{% include "page_blocks/bnr.html" %}
+{% include "page_blocks/content.html" %}
+{% endblock content %}

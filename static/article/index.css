@@ -1,7 +1,11 @@
-body {
-  padding-top: 5rem;
+.chart {
+  width: min(100%, 800px);
 }
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
+
+.content_block-image {
+  width: min(100%, 600px);
+}
+
+.content_block-text {
+  width: min(100%, 600px);
 }
