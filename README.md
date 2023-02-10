@@ -2,7 +2,8 @@
 
 ## Підготовка
 
-Для економії часу щоб не налаштовувати оточення можна використати [docker](https://docs.docker.com/desktop/install/mac-install/): 0. Відрийте термінал і перейдіть у папку із проектом (`cd /path/to/blog`);
+Для економії часу щоб не налаштовувати оточення можна використати [docker](https://docs.docker.com/desktop/install/mac-install/):
+0. Відрийте термінал і перейдіть у папку із проектом (`cd /path/to/blog`);
 
 1. Збілдити image:
 
