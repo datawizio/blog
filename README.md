@@ -3,15 +3,16 @@
 ## Підготовка
 
 Для економії часу щоб не налаштовувати оточення можна використати [docker](https://docs.docker.com/desktop/install/mac-install/):
-0. Відрийте термінал і перейдіть у папку із проектом (`cd /path/to/blog`);
 
-1. Збілдити image:
+1. Відрийте термінал і перейдіть у папку із проектом (`cd /path/to/blog`);
+
+2. Збілдити image:
 
 ```
 docker build -t blog:0.0.1 .
 ```
 
-2. Запустити container:
+3. Запустити container:
 
 ```
 docker run -it --rm \
